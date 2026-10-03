@@ -1,0 +1,27 @@
+# Виртуальные окружения
+.venv/
+venv/
+env/
+
+# Кэш Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Тесты и покрытие
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# Идея / редакторы
+.idea/
+.vscode/
+
+# Локальные секреты и БД
+.env
+*.sqlite3
+
+# Poetry (если позже настроим — папка dist и прочее)
+dist/
+build/
