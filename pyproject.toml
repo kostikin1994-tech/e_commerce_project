@@ -28,4 +28,5 @@ target-version = ["py312"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
-addopts = "-v --cov=main --cov-report=term-missing --cov-report=html"
+pythonpath = ["."]
+addopts = "-v --cov=src.main --cov-report=term-missing --cov-report=html"
