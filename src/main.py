@@ -1,3 +1,5 @@
+from unicodedata import category
+
 
 class Product:
     name: str
@@ -11,6 +13,14 @@ class Product:
         self.__price = None
         self.price = price
         self.quantity = quantity
+
+    def __str__(self):
+        return f'{self.name}, {self.price} руб. Остаток: {self.quantity} шт.'
+
+    def __add__(self, other):
+        price_1 = self.price * self.quantity
+        price_2 = other.price * other.quantity
+        return price_1 + price_2
 
     @classmethod
     def new_product(cls, product, products=None):
@@ -52,6 +62,14 @@ class Category:
         for product in products:
             self.add_product(product)
 
+    def __str__(self):
+        result = f'{self.name}, количество продуктов: {len(self.__products)}'
+
+        for product in self.__products:
+            result += f'\n{product}'
+
+        return result
+
     def add_product(self, product):
         self.__products.append(product)
         Category.product_count += 1
@@ -66,4 +84,12 @@ class Category:
             )
         return result
 
+prod_1 = Product('Макбук', 'Компьютер, который раскладывается и там еще яблоко нарисовано.', 100000, 10)
+prod_2 = Product('Айпад', 'Экран от компьютера, который раскладывается и там еще яблоко нарисовано.', 80000, 20)
+
+category = Category('Эппл', 'Электроника, на которой нарисованы яблочки', [prod_1, prod_2])
+
+print(category)
+
+print()
 
