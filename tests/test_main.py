@@ -103,3 +103,27 @@ def test_duplicate_product():
     assert result is existing_product
     assert existing_product.quantity == 5
     assert existing_product.price == 1500.0
+
+
+def test_product_add():
+    product_1 = Product('Телефон', 'Описание', 1000, 5)
+    product_2 = Product('Планшет', 'Описание', 2000, 3)
+    assert product_1 + product_2 == 11000
+
+
+def test_product_str():
+    product = Product('Телефон', 'Описание', 1000, 5)
+    assert str(product) == 'Телефон, 1000 руб. Остаток: 5 шт.'
+
+
+def test_category_str():
+    product_1 = Product('Телефон', 'Описание', 1000, 5)
+    product_2 = Product('Планшет', 'Описание', 2000, 3)
+    products = [product_1, product_2]
+    category = Category('Электроника', 'Описание', products)
+
+    assert str(category) == (
+        'Электроника, количество продуктов: 2\n'
+        'Телефон, 1000 руб. Остаток: 5 шт.\n'
+        'Планшет, 2000 руб. Остаток: 3 шт.'
+    )
