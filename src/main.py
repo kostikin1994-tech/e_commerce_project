@@ -63,7 +63,7 @@ class Category:
             self.add_product(product)
 
     def __str__(self):
-        result = f'{self.name}, количество продуктов: {len(self.__products)}'
+        result = f'{self.name}, количество продуктов: {sum(product.quantity for product in self.__products)}'
 
         for product in self.__products:
             result += f'\n{product}'
