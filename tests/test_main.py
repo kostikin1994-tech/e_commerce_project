@@ -1,6 +1,6 @@
 
 import pytest
-from src.main import Product, Category
+from src.main import Product, Category, Smartphone, LawnGrass
 
 
 @pytest.fixture
@@ -127,3 +127,75 @@ def test_category_str():
         'Телефон, 1000 руб. Остаток: 5 шт.\n'
         'Планшет, 2000 руб. Остаток: 3 шт.'
     )
+
+def test_product_str():
+    product = Product("Samsung", "Телефон", 1000, 5)
+
+    assert str(product) == "Samsung, 1000 руб. Остаток: 5 шт."
+
+
+def test_product_add():
+    product1 = Product("Телефон 1", "Описание", 1000, 2)
+    product2 = Product("Телефон 2", "Описание", 2000, 3)
+
+    assert product1 + product2 == 8000
+
+
+def test_product_add_different_types():
+    smartphone = Smartphone(
+        "Samsung", "Телефон", 1000, 2, 95.5, "S23", 256, "Серый"
+    )
+    grass = LawnGrass(
+        "Трава", "Для газона", 500, 3, "Россия", "7 дней", "Зелёный"
+    )
+
+    with pytest.raises(TypeError):
+        smartphone + grass
+
+
+def test_category_str():
+    product1 = Product("Телефон 1", "Описание", 1000, 2)
+    product2 = Product("Телефон 2", "Описание", 2000, 3)
+    category = Category("Телефоны", "Мобильные телефоны", [product1, product2])
+
+    expected = (
+        "Телефоны, количество продуктов: 5\n"
+        "Телефон 1, 1000 руб. Остаток: 2 шт.\n"
+        "Телефон 2, 2000 руб. Остаток: 3 шт."
+    )
+
+    assert str(category) == expected
+
+
+def test_category_add_invalid_product():
+    category = Category("Телефоны", "Мобильные телефоны", [])
+
+    with pytest.raises(TypeError):
+        category.add_product("Это не товар")
+
+
+def test_smartphone_initialization():
+    smartphone = Smartphone(
+        "Samsung", "Телефон", 1000, 2, 95.5, "S23", 256, "Серый"
+    )
+
+    assert smartphone.name == "Samsung"
+    assert smartphone.price == 1000
+    assert smartphone.quantity == 2
+    assert smartphone.efficiency == 95.5
+    assert smartphone.model == "S23"
+    assert smartphone.memory == 256
+    assert smartphone.color == "Серый"
+
+
+def test_lawn_grass_initialization():
+    grass = LawnGrass(
+        "Трава", "Для газона", 500, 3, "Россия", "7 дней", "Зелёный"
+    )
+
+    assert grass.name == "Трава"
+    assert grass.price == 500
+    assert grass.quantity == 3
+    assert grass.country == "Россия"
+    assert grass.germination_period == "7 дней"
+    assert grass.color == "Зелёный"

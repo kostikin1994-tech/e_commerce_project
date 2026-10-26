@@ -18,6 +18,10 @@ class Product:
         return f'{self.name}, {self.price} руб. Остаток: {self.quantity} шт.'
 
     def __add__(self, other):
+        # новый код, проверить
+        if type(self) is not type(other):
+            return NotImplemented
+        # новый код, проверить
         price_1 = self.price * self.quantity
         price_2 = other.price * other.quantity
         return price_1 + price_2
@@ -71,8 +75,15 @@ class Category:
         return result
 
     def add_product(self, product):
-        self.__products.append(product)
-        Category.product_count += 1
+        # новый код, проверить
+        if isinstance(product, Product):
+        # новый код, проверить
+            self.__products.append(product) # Старый код
+            Category.product_count += 1 # Старый код
+        # новый код, проверить
+        else:
+            raise TypeError(f'Объект типа {type(product).__name__} не является объектом класса.')
+        # новый код, проверить
 
     @property
     def products(self):
@@ -84,12 +95,20 @@ class Category:
             )
         return result
 
-prod_1 = Product('Макбук', 'Компьютер, который раскладывается и там еще яблоко нарисовано.', 100000, 10)
-prod_2 = Product('Айпад', 'Экран от компьютера, который раскладывается и там еще яблоко нарисовано.', 80000, 20)
+class Smartphone(Product):
 
-category = Category('Эппл', 'Электроника, на которой нарисованы яблочки', [prod_1, prod_2])
+    def __init__(self, name, description, price, quantity, efficiency, model, memory, color):
+        super().__init__(name, description, price, quantity)
+        self.efficiency = efficiency
+        self.model = model
+        self.memory = memory
+        self.color = color
 
-print(category)
+class LawnGrass(Product):
 
-print()
+    def __init__(self, name, description, price, quantity, country, germination_period, color):
+        super().__init__(name, description, price, quantity)
+        self.country = country
+        self.germination_period = germination_period
+        self.color = color
 
