@@ -1,6 +1,6 @@
 
 import pytest
-from src.main import Product, Category, Smartphone, LawnGrass
+from src.main import BaseProduct, Product, Category, Smartphone, LawnGrass
 
 
 @pytest.fixture
@@ -199,3 +199,56 @@ def test_lawn_grass_initialization():
     assert grass.country == "Россия"
     assert grass.germination_period == "7 дней"
     assert grass.color == "Зелёный"
+
+
+def test_base_product_is_abstract():
+    # Абстрактный класс нельзя создать напрямую.
+    with pytest.raises(TypeError):
+        BaseProduct("Телефон", "Описание", 1000, 5)
+
+
+def test_product_inherits_base_product():
+    # Проверяем наследование Product от BaseProduct.
+    product = Product("Телефон", "Описание", 1000, 5)
+
+    assert isinstance(product, BaseProduct)
+
+
+def test_mixin_logs_product_creation(capsys):
+    # Создаём товар и перехватываем вывод в консоль.
+    Product("Телефон", "Описание", 1000, 5)
+
+    captured = capsys.readouterr()
+
+    assert "Product" in captured.out
+    assert "Телефон" in captured.out
+    assert "Описание" in captured.out
+    assert "1000" in captured.out
+    assert "5" in captured.out
+
+
+def test_product_repr():
+    product = Product("Телефон", "Описание", 1000, 5)
+
+    result = repr(product)
+
+    assert "Product" in result
+    assert "Телефон" in result
+    assert "Описание" in result
+
+
+def test_smartphone_inherits_base_product():
+    smartphone = Smartphone(
+        "Samsung", "Телефон", 1000, 2, 95.5, "S23", 256, "Серый"
+    )
+
+    assert isinstance(smartphone, BaseProduct)
+
+
+def test_lawn_grass_inherits_base_product():
+    grass = LawnGrass(
+        "Трава", "Для газона", 500, 3, "Россия", "7 дней", "Зелёный"
+    )
+
+    assert isinstance(grass, BaseProduct)
+
