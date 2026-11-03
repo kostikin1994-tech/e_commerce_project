@@ -33,7 +33,11 @@ class Product(MixinLog, BaseProduct):
 
     def __init__(self, name, description, price, quantity):
         self.__price = None
-        super().__init__(name, description, price, quantity)
+        if quantity > 0:
+            super().__init__(name, description, price, quantity)
+        else:
+            raise ValueError('Товар с нулевым количеством не может быть добавлен')
+
 
     def __str__(self):
         return f'{self.name}, {self.price} руб. Остаток: {self.quantity} шт.'
@@ -110,6 +114,19 @@ class Category:
                 'не является объектом класса Product.'
             )
 
+    def middle_price(self):
+        sum_prod = 0
+        count_products = 0
+        try:
+            for product in self.__products:
+                sum_prod += product.price
+                count_products += 1
+            result = sum_prod / count_products
+            return result
+        except ZeroDivisionError:
+            return 0
+
+
     @property
     def products(self):
         result = ""
@@ -144,3 +161,24 @@ class LawnGrass(Product):
         self.country = country
         self.germination_period = germination_period
         self.color = color
+
+
+if __name__ == '__main__':
+    try:
+        product_invalid = Product("Бракованный товар", "Неверное количество", 1000.0, 0)
+    except ValueError as e:
+        print(
+            "Возникла ошибка ValueError прерывающая работу программы при попытке добавить продукт с нулевым количеством")
+    else:
+        print("Не возникла ошибка ValueError при попытке добавить продукт с нулевым количеством")
+
+    product1 = Product("Samsung Galaxy S23 Ultra", "256GB, Серый цвет, 200MP камера", 180000.0, 5)
+    product2 = Product("Iphone 15", "512GB, Gray space", 210000.0, 8)
+    product3 = Product("Xiaomi Redmi Note 11", "1024GB, Синий", 31000.0, 14)
+
+    category1 = Category("Смартфоны", "Категория смартфонов", [product1, product2, product3])
+
+    print(category1.middle_price())
+
+    category_empty = Category("Пустая категория", "Категория без продуктов", [])
+    print(category_empty.middle_price())

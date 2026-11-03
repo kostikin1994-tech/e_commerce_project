@@ -252,3 +252,38 @@ def test_lawn_grass_inherits_base_product():
 
     assert isinstance(grass, BaseProduct)
 
+
+def test_product_invalid_quantity():
+    """Проверяем ошибку при создании товара с нулевым количеством."""
+
+    with pytest.raises(ValueError) as exc_info:
+        Product("Телефон", "Описание", 1000, 0)
+
+    assert str(exc_info.value) == (
+        "Товар с нулевым количеством не может быть добавлен"
+    )
+
+
+def test_category_middle_price():
+    """Проверяем правильность расчёта средней цены товаров."""
+
+    product1 = Product("Телефон", "Описание", 1000, 5)
+    product2 = Product("Планшет", "Описание", 2000, 3)
+    product3 = Product("Ноутбук", "Описание", 3000, 2)
+
+    category = Category(
+        "Электроника",
+        "Электронные устройства",
+        [product1, product2, product3]
+    )
+
+    assert category.middle_price() == 2000
+
+
+def test_category_middle_price_empty():
+    """Проверяем расчёт средней цены пустой категории."""
+
+    category = Category("Пустая категория", "Описание", [])
+
+    assert category.middle_price() == 0
+
